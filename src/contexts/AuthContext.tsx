@@ -1,6 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
+// Set the base URL for all axios requests
+// This will read from VITE_API_URL environment variable
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+
 interface User {
   id: string;
   name: string;
