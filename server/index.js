@@ -11,7 +11,6 @@ import userRoutes from "./routes/users.js";
 import transferRoutes from "./routes/transfers.js";
 import inviteRoutes from "./routes/invite.js";
 
-
 // Load environment variables
 dotenv.config();
 
@@ -22,15 +21,25 @@ const PORT = process.env.PORT || 5000;
 // Create HTTP server for Socket.IO
 const httpServer = createServer(app);
 
-// Set up Socket.IO
+// Set up Socket.IO with updated CORS configuration
 const io = new SocketIOServer(httpServer, {
-  cors: { origin: process.env.CLIENT_URL, credentials: true },
+  cors: {
+    origin: ["https://datacrypt-client.vercel.app", "http://localhost:5173"], // Allow Vercel and local development
+    credentials: true,
+  },
 });
 
 // Socket.IO connection
 io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
   socket.on("join", (userEmail) => {
     socket.join(userEmail); // Join a room named after the user's email
+    console.log(`User with email ${userEmail} joined room ${userEmail}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected:", socket.id);
   });
 });
 
@@ -42,7 +51,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+const allowedOrigins = [
+  "https://datacrypt-client.vercel.app", // Vercel client URL
+  "http://localhost:5173", // Local development
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,8 +82,8 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-app.use("/api/invite", inviteRoutes);
 // API routes
+app.use("/api/invite", inviteRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/transfers", transferRoutes);
