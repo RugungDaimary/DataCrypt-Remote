@@ -24,7 +24,7 @@ const httpServer = createServer(app);
 // Set up Socket.IO with updated CORS configuration
 const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(",")
-  : ["http://localhost:5173", "https://datacrypt-client.vercel.app", "https://datacrypt-remote.vercel.app"];
+  : ["http://localhost:4173", "https://datacrypt-client.vercel.app", "https://datacrypt-remote.vercel.app"];
 
 const io = new SocketIOServer(httpServer, {
   cors: {
