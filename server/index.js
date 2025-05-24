@@ -24,7 +24,7 @@ const httpServer = createServer(app);
 // Set up Socket.IO with updated CORS configuration
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: "https://datacrypt-client.vercel.app",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -53,8 +53,8 @@ const __dirname = path.dirname(__filename);
 
 // Middleware
 const allowedOrigins = [
-  "https://datacrypt-client.vercel.app", // Vercel client URL
-  "http://localhost:5173", // Local development
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
 ];
 
 app.use(
