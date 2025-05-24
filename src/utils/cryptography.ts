@@ -1,0 +1,1 @@
+// This file is intentionally empty since encryption is handled by external app
