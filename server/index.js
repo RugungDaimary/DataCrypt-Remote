@@ -24,9 +24,10 @@ const httpServer = createServer(app);
 // Set up Socket.IO with updated CORS configuration
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: ["https://datacrypt-client.vercel.app", "http://localhost:5173"], // Allow Vercel and local development
-    credentials: true,
-  },
+    origin: "https://datacrypt-client.vercel.app",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 // Socket.IO connection
