@@ -22,9 +22,13 @@ const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 
 // Set up Socket.IO with updated CORS configuration
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",")
+  : ["http://localhost:5173", "https://datacrypt-client.vercel.app"];
+
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -52,11 +56,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-];
-
 app.use(
   cors({
     origin: (origin, callback) => {
