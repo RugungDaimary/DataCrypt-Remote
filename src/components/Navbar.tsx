@@ -8,11 +8,16 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
+  const [isPublicKeyCopied, setIsPublicKeyCopied] = useState(false);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedMessage('Copied!');
-    setTimeout(() => setCopiedMessage(null), 2000);
+    setIsPublicKeyCopied(true);
+    setTimeout(() => {
+      setCopiedMessage(null);
+      setIsPublicKeyCopied(false);
+    }, 2000);
   };
 
   const handleLogout = () => {
@@ -64,7 +69,7 @@ const Navbar: React.FC = () => {
                     {user.publicKey && (
                       <button
                         onClick={() => copyToClipboard(user.publicKey || '')}
-                        className="ml-2 text-indigo-200 hover:text-white focus:outline-none"
+                        className={`ml-2 ${isPublicKeyCopied ? 'text-green-400' : 'text-indigo-200 hover:text-white'} focus:outline-none`}
                         title="Copy public key"
                       >
                         <Copy className="h-4 w-4" />
