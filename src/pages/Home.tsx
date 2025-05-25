@@ -373,7 +373,7 @@ const Home: React.FC = () => {
                       <div className="font-medium text-blue-800">
                         Recipient Public Key:
                       </div>
-                      <div className="text-sm text-blue-600 mt-1 break-all">
+                      <div className="text-sm text-blue-600 mt-1 overflow-hidden whitespace-nowrap text-ellipsis w-full">
                         {recipientPublicKey}
                       </div>
                     </div>
