@@ -95,6 +95,7 @@ const Home: React.FC = () => {
   const encryptedFileInputRef = useRef<HTMLInputElement>(null);
   const aesKeyInputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMediaQuery({ maxWidth: 600 });
+  const [isCopied, setIsCopied] = useState(false);
 
   // Fetch received files for the logged-in user
   const fetchReceivedFiles = async () => {
@@ -274,8 +275,11 @@ const Home: React.FC = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    // setSuccess("Copied to clipboard");
-    setTimeout(() => setSuccess(null), 3000);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+      setSuccess(null);
+    }, 2000);
   };
 
   function isValidDomain(email: string) {
@@ -375,7 +379,7 @@ const Home: React.FC = () => {
                     </div>
                     <button
                       onClick={() => copyToClipboard(recipientPublicKey || '')}
-                      className="flex-shrink-0 text-blue-500 hover:text-blue-700"
+                      className={`flex-shrink-0 ${isCopied ? 'text-green-500' : 'text-blue-500 hover:text-blue-700'}`}
                       title="Copy public key"
                     >
                       <Copy className="h-5 w-5" />
