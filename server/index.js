@@ -22,9 +22,12 @@ const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 
 // Set up Socket.IO with updated CORS configuration
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(",")
-  : ["http://localhost:5173", "https://datacrypt-client.vercel.app"];
+// const allowedOrigins = process.env.CLIENT_URL ?? `https://datacrypt-client.vercel.app`;
+const allowedOrigins = [
+  "https://datacrypt-client.vercel.app", // Vercel client URL
+  "http://localhost:5173", // Local development
+];
+// console.log(allowedOrigins);
 
 const io = new SocketIOServer(httpServer, {
   cors: {
@@ -58,16 +61,22 @@ const __dirname = path.dirname(__filename);
 // CORS middleware
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
