@@ -29,13 +29,15 @@ const allowedOrigins = [
 ];
 // console.log(allowedOrigins);
 
-const io = new SocketIOServer(httpServer, {
-  cors: {
-    origin: allowedOrigins,
-    // methods: ["GET", "POST"],
-    credentials: true
-  }
-});
+const io = new SocketIOServer(httpServer
+  // , {
+  // cors: {
+  //   origin: allowedOrigins,
+  //   // methods: ["GET", "POST"],
+  //   credentials: true
+  // }
+// }
+);
 
 // Socket.IO connection
 io.on("connection", (socket) => {
@@ -59,12 +61,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // CORS middleware
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+
+app.use(cors())
+
+// app.use(
+//   cors({
+//     origin: allowedOrigins,
+//     credentials: true,
+//   })
+// );
 // app.use(
 //   cors({
 //     origin: (origin, callback) => {
