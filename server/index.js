@@ -29,32 +29,32 @@ const allowedOrigins = [
 ];
 // console.log(allowedOrigins);
 
-const io = new SocketIOServer(httpServer
-  // , {
-  // cors: {
-  //   origin: allowedOrigins,
-  //   // methods: ["GET", "POST"],
-  //   credentials: true
-  // }
-// }
-);
+// const io = new SocketIOServer(httpServer
+//   // , {
+//   // cors: {
+//   //   origin: allowedOrigins,
+//   //   // methods: ["GET", "POST"],
+//   //   credentials: true
+//   // }
+// // }
+// );
 
 // Socket.IO connection
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
+// io.on("connection", (socket) => {
+//   console.log("A user connected:", socket.id);
 
-  socket.on("join", (userEmail) => {
-    socket.join(userEmail); // Join a room named after the user's email
-    console.log(`User with email ${userEmail} joined room ${userEmail}`);
-  });
+//   socket.on("join", (userEmail) => {
+//     socket.join(userEmail); // Join a room named after the user's email
+//     console.log(`User with email ${userEmail} joined room ${userEmail}`);
+//   });
 
-  socket.on("disconnect", () => {
-    console.log("A user disconnected:", socket.id);
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("A user disconnected:", socket.id);
+//   });
+// });
 
-// Make io accessible in routes
-app.set("io", io);
+// // Make io accessible in routes
+// app.set("io", io);
 
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
