@@ -165,7 +165,6 @@ const Home: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
       setEncryptedFile(e.target.files[0]);
       setIsFileDisplayGreen(true);
-      setTimeout(() => setIsFileDisplayGreen(false), 2000);
     } else {
       setEncryptedFile(null);
       setIsFileDisplayGreen(false);
@@ -178,7 +177,6 @@ const Home: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
       setEncryptedAESKey(e.target.files[0]);
       setIsKeyDisplayGreen(true);
-      setTimeout(() => setIsKeyDisplayGreen(false), 2000);
     } else {
       setEncryptedAESKey(null);
       setIsKeyDisplayGreen(false);
@@ -283,6 +281,8 @@ const Home: React.FC = () => {
       setUploadSuccess(true);
       setIsFileSelected(false);
       setIsKeySelected(false);
+      setIsFileDisplayGreen(false);
+      setIsKeyDisplayGreen(false);
       setTimeout(() => {
         setSuccess(null);
         setUploadSuccess(false);
