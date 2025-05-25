@@ -36,7 +36,13 @@ const SignIn: React.FC = () => {
       });
       setOtpSent(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else if (err.response && err.response.status === 404) {
+        setError('User not found. Please check the email address.');
+      } else {
+        setError('Failed to send OTP. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -68,7 +74,11 @@ const SignIn: React.FC = () => {
       }
       navigate('/home');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please check your credentials.');
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('OTP login failed. Please check the OTP or try again.');
+      }
     } finally {
       setLoading(false);
     }
