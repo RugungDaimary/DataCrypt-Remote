@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                 {user.publicKey && (
                   <div className="flex items-center space-x-2">
                     <span className="text-sm">Your Public Key:</span>
-                    <span className="hidden md:inline text-sm bg-indigo-700 px-2 py-1 rounded-md">
+                    <span className="hidden md:inline text-sm bg-indigo-700 px-2 py-1 rounded-md overflow-hidden whitespace-nowrap text-ellipsis w-40">
                       {user.publicKey}
                     </span>
                   </div>
