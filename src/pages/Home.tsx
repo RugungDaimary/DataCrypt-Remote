@@ -368,18 +368,15 @@ const Home: React.FC = () => {
 
               {recipientPublicKey && (
                 <div className="mb-4 p-3 bg-blue-50 rounded-md border border-blue-200">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium text-blue-800">
-                        Recipient Public Key:
-                      </div>
-                      <div className="text-sm text-blue-600 mt-1 overflow-hidden whitespace-nowrap text-ellipsis w-full">
-                        {recipientPublicKey}
-                      </div>
+                  <div className="font-medium text-blue-800 mb-2">Recipient Public Key:</div>
+                  <div className="flex items-center justify-between space-x-2">
+                    <div className="flex-grow text-sm text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+                      {recipientPublicKey}
                     </div>
                     <button
-                      onClick={() => copyToClipboard(recipientPublicKey)}
-                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => copyToClipboard(recipientPublicKey || '')}
+                      className="flex-shrink-0 text-blue-500 hover:text-blue-700"
+                      title="Copy public key"
                     >
                       <Copy className="h-5 w-5" />
                     </button>
