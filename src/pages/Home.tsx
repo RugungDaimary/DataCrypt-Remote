@@ -60,7 +60,7 @@ const handleDownloadBoth = async (transfer: any) => {
     // Create a zip file
     const zip = new JSZip();
     zip.file(transfer.fileName, fileBlob);
-    zip.file("encrypted_AES.key", keyBlob);
+    zip.file(transfer.fileName+".key", keyBlob);
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
 
