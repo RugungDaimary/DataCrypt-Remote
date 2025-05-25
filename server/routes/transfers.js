@@ -205,7 +205,7 @@ router.get("/file/:token", async (req, res) => {
       { expiresIn: 60 }
     );
 
-    res.json({ fileUrl });
+    res.json({ fileUrl, fileName: transfer.fileName });
   } catch (error) {
     console.error("Download file by token error:", error);
     res.status(500).json({ message: "Server error" });
