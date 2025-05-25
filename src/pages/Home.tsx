@@ -274,7 +274,7 @@ const Home: React.FC = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    setSuccess("Copied to clipboard");
+    // setSuccess("Copied to clipboard");
     setTimeout(() => setSuccess(null), 3000);
   };
 
