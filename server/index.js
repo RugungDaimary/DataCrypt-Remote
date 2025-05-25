@@ -81,14 +81,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/transfers", transferRoutes);
 
-// Serve static files in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../dist")));
+// Serve static files in production (Commented out as frontend is served by Vercel)
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../dist/index.html"));
-  });
-}
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../dist/index.html"));
+//   });
+// }
 
 // Start server with Socket.IO (Uncommented - switch back to httpServer.listen)
 httpServer.listen(PORT, () => {
