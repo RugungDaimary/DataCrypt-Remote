@@ -27,22 +27,22 @@ const SignIn: React.FC = () => {
     setError(null);
 
     try {
-      await fetch(`${BASE_URL}/api/auth/send-otp`, {
+      const response = await fetch(`${BASE_URL}/api/auth/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      }
+
       setOtpSent(true);
     } catch (err: any) {
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else if (err.response && err.response.status === 404) {
-        setError('User not found. Please check the email address.');
-      } else {
-        setError('Failed to send OTP. Please try again.');
-      }
+      setError(err.message || 'Failed to send OTP. Could not connect to server or an unexpected error occurred.');
     } finally {
       setLoading(false);
     }
