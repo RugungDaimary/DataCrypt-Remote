@@ -97,6 +97,10 @@ const Home: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: 600 });
   const [isCopied, setIsCopied] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isFileSelected, setIsFileSelected] = useState(false);
+  const [isKeySelected, setIsKeySelected] = useState(false);
+  const [isFileDisplayGreen, setIsFileDisplayGreen] = useState(false);
+  const [isKeyDisplayGreen, setIsKeyDisplayGreen] = useState(false);
 
   // Fetch received files for the logged-in user
   const fetchReceivedFiles = async () => {
@@ -160,6 +164,11 @@ const Home: React.FC = () => {
   ) => {
     if (e.target.files && e.target.files[0]) {
       setEncryptedFile(e.target.files[0]);
+      setIsFileDisplayGreen(true);
+      setTimeout(() => setIsFileDisplayGreen(false), 2000);
+    } else {
+      setEncryptedFile(null);
+      setIsFileDisplayGreen(false);
     }
   };
 
@@ -168,6 +177,11 @@ const Home: React.FC = () => {
   ) => {
     if (e.target.files && e.target.files[0]) {
       setEncryptedAESKey(e.target.files[0]);
+      setIsKeyDisplayGreen(true);
+      setTimeout(() => setIsKeyDisplayGreen(false), 2000);
+    } else {
+      setEncryptedAESKey(null);
+      setIsKeyDisplayGreen(false);
     }
   };
 
@@ -267,6 +281,8 @@ const Home: React.FC = () => {
 
       fetchSentFiles();
       setUploadSuccess(true);
+      setIsFileSelected(false);
+      setIsKeySelected(false);
       setTimeout(() => {
         setSuccess(null);
         setUploadSuccess(false);
@@ -441,7 +457,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 {encryptedFile && (
-                  <div className={`mt-2 text-sm ${uploadSuccess ? 'text-green-600' : 'text-gray-500'}`}>
+                  <div className={`mt-2 text-sm ${isFileDisplayGreen ? 'text-green-600' : 'text-gray-500'}`}>
                     Selected file: {encryptedFile.name} (
                     {(encryptedFile.size / 1024 / 1024).toFixed(2)} MB)
                   </div>
@@ -492,7 +508,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 {encryptedAESKey && (
-                  <div className={`mt-2 text-sm ${uploadSuccess ? 'text-green-600' : 'text-gray-500'}`}>
+                  <div className={`mt-2 text-sm ${isKeyDisplayGreen ? 'text-green-600' : 'text-gray-500'}`}>
                     Selected key: {encryptedAESKey.name} (
                     {(encryptedAESKey.size / 1024).toFixed(2)} KB)
                   </div>
