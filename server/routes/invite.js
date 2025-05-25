@@ -24,11 +24,13 @@ router.post("/", async (req, res) => {
             <p style="font-size: 1.1rem; color: #374151;">
               Hello,
               <br /><br />
-              ${(senderName || "Someone")} wants to securely share files with you using our platform.<br />
+              ${
+                senderName || "Someone"
+              } wants to securely share files with you using our platform.<br />
               <b>To receive files, you need to create an account.</b>
             </p>
             <div style="text-align: center; margin: 32px 0;">
-              <a href="http://localhost:5173/signup" style="background: #4f46e5; color: #fff; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-size: 1.1rem; font-weight: bold; box-shadow: 0 2px 4px #0002;">
+              <a href="https://datacrypt-client.vercel.app/signup" style="background: #4f46e5; color: #fff; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-size: 1.1rem; font-weight: bold; box-shadow: 0 2px 4px #0002;">
                 Create Your Account
               </a>
 
