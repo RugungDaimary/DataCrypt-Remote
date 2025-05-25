@@ -22,39 +22,22 @@ const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 
 // Set up Socket.IO with updated CORS configuration
-// const allowedOrigins = process.env.CLIENT_URL ?? `https://datacrypt-client.vercel.app`;
 const allowedOrigins = [
-  "https://datacrypt-client.vercel.app", // Vercel client URL
+  process.env.CLIENT_URL, // Vercel client URL (from .env)
   "http://localhost:5173", // Local development
 ];
 // console.log(allowedOrigins);
 
-// const io = new SocketIOServer(httpServer
-//   // , {
-//   // cors: {
-//   //   origin: allowedOrigins,
-//   //   // methods: ["GET", "POST"],
-//   //   credentials: true
-//   // }
-// // }
-// );
+const io = new SocketIOServer(httpServer, {
+  cors: {
+    origin: allowedOrigins,
+    // methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
-// Socket.IO connection
-// io.on("connection", (socket) => {
-//   console.log("A user connected:", socket.id);
-
-//   socket.on("join", (userEmail) => {
-//     socket.join(userEmail); // Join a room named after the user's email
-//     console.log(`User with email ${userEmail} joined room ${userEmail}`);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("A user disconnected:", socket.id);
-//   });
-// });
-
-// // Make io accessible in routes
-// app.set("io", io);
+// Make io accessible in routes
+app.set("io", io);
 
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
@@ -62,26 +45,22 @@ const __dirname = path.dirname(__filename);
 
 // CORS middleware
 
-app.use(cors())
+// app.use(cors())
 
-// app.use(
-//   cors({
-//     origin: allowedOrigins,
-//     credentials: true,
-//   })
-// );
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

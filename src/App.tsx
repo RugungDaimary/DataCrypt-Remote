@@ -19,13 +19,13 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignUp />} />
               <Route path="/signin" element={<SignIn />} />
-              {/* <Route path="/home" element={
+              <Route path="/home" element={
                 <ProtectedRoute>
                   <Home />
                 </ProtectedRoute>
               } />
-              <Route path="/" element={<Navigate to="/home" replace />} /> */}
-              <Route path='/' element={<Home2/>}/>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              {/* <Route path='/' element={<Home2/>}/> */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
