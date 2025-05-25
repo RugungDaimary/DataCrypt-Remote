@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Shield, LogOut, LogIn, UserPlus } from "lucide-react";
+import { Shield, LogOut, LogIn, UserPlus, Copy } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth(); // Dynamically fetch user and publicKey from context
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedMessage('Copied!');
+    setTimeout(() => setCopiedMessage(null), 2000);
+  };
 
   const handleLogout = () => {
     logout();
@@ -54,6 +61,15 @@ const Navbar: React.FC = () => {
                     <span className="hidden md:inline text-sm bg-indigo-700 px-2 py-1 rounded-md overflow-hidden whitespace-nowrap text-ellipsis w-40">
                       {user.publicKey}
                     </span>
+                    {user.publicKey && (
+                      <button
+                        onClick={() => copyToClipboard(user.publicKey || '')}
+                        className="ml-2 text-indigo-200 hover:text-white focus:outline-none"
+                        title="Copy public key"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                 )}
                 <span className="hidden md:inline">Welcome, {user.name}</span>
