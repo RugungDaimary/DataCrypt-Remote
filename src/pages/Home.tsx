@@ -60,7 +60,9 @@ const handleDownloadBoth = async (transfer: any) => {
     // Create a zip file
     const zip = new JSZip();
     zip.file(transfer.fileName, fileBlob);
-    zip.file(transfer.fileName+".key", keyBlob);
+    // Generate the desired key filename by removing the last extension (.enc) and adding .key
+    const keyFileName = transfer.fileName.substring(0, transfer.fileName.lastIndexOf('.')) + '.key';
+    zip.file(keyFileName, keyBlob);
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
 
