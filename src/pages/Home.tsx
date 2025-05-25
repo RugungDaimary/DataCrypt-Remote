@@ -96,6 +96,7 @@ const Home: React.FC = () => {
   const aesKeyInputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMediaQuery({ maxWidth: 600 });
   const [isCopied, setIsCopied] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   // Fetch received files for the logged-in user
   const fetchReceivedFiles = async () => {
@@ -265,7 +266,11 @@ const Home: React.FC = () => {
       }
 
       fetchSentFiles();
-      setTimeout(() => setSuccess(null), 3000);
+      setUploadSuccess(true);
+      setTimeout(() => {
+        setSuccess(null);
+        setUploadSuccess(false);
+      }, 3000);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to send files");
     } finally {
@@ -436,7 +441,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 {encryptedFile && (
-                  <div className="mt-2 text-sm text-gray-500">
+                  <div className={`mt-2 text-sm ${uploadSuccess ? 'text-green-600' : 'text-gray-500'}`}>
                     Selected file: {encryptedFile.name} (
                     {(encryptedFile.size / 1024 / 1024).toFixed(2)} MB)
                   </div>
@@ -487,7 +492,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 {encryptedAESKey && (
-                  <div className="mt-2 text-sm text-gray-500">
+                  <div className={`mt-2 text-sm ${uploadSuccess ? 'text-green-600' : 'text-gray-500'}`}>
                     Selected key: {encryptedAESKey.name} (
                     {(encryptedAESKey.size / 1024).toFixed(2)} KB)
                   </div>
