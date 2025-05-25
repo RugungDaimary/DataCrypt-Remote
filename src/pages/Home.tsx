@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client"; // Commented out Socket.IO client import
 import {
   Upload,
   Download,
@@ -42,9 +42,10 @@ interface FileTransfer {
 
 const BASE_URL = import.meta.env.VITE_API_URL ;
 
-const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
-  withCredentials: true,
-});
+// Commented out Socket.IO client initialization
+// const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+//   withCredentials: true,
+// });
 
 const handleDownloadBoth = async (transfer: any) => {
   try {
@@ -117,28 +118,29 @@ const Home: React.FC = () => {
       setError("Failed to retrieve sent files");
     }
   };
-  useEffect(() => {
-    if (user?.email) {
-      // Join the user's personal room
-      socket.emit("join", user.email);
+  // Commented out Socket.IO useEffect
+  // useEffect(() => {
+  //   if (user?.email) {
+  //     // Join the user's personal room
+  //     socket.emit("join", user.email);
 
-      // Listen for new file notifications
-      socket.on("new-file", (fileInfo) => {
-        fetchReceivedFiles(); // Refresh the inbox
-        setSuccess(`New file received: ${fileInfo.fileName}`);
-        setTimeout(() => setSuccess(null), 5000);
-      });
-    }
+  //     // Listen for new file notifications
+  //     socket.on("new-file", (fileInfo) => {
+  //       fetchReceivedFiles(); // Refresh the inbox
+  //       setSuccess(`New file received: ${fileInfo.fileName}`);
+  //       setTimeout(() => setSuccess(null), 5000);
+  //     });
+  //   }
 
-    // Cleanup on unmount or user change
-    return () => {
-      if (user?.email) {
-        socket.off("new-file");
-        socket.emit("leave", user.email);
-      }
-    };
-    // eslint-disable-next-line
-  }, [user?.email]);
+  //   // Cleanup on unmount or user change
+  //   return () => {
+  //     if (user?.email) {
+  //       socket.off("new-file");
+  //       socket.emit("leave", user.email);
+  //     }
+  //   };
+  //   // eslint-disable-next-line
+  // }, [user?.email]);
 
   // Fetch received files when the component mounts or user email changes
   useEffect(() => {

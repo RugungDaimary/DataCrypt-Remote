@@ -4,8 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import { createServer } from "http";
-import { Server as SocketIOServer } from "socket.io";
+// import { createServer } from "http"; // Commented out http server import
+// import { Server as SocketIOServer } from "socket.io"; // Commented out Socket.IO server import
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import transferRoutes from "./routes/transfers.js";
@@ -18,26 +18,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Create HTTP server for Socket.IO
-const httpServer = createServer(app);
+// Create HTTP server for Socket.IO (Commented out)
+// const httpServer = createServer(app);
 
-// Set up Socket.IO with updated CORS configuration
+// Set up Socket.IO with updated CORS configuration (Commented out)
 const allowedOrigins = [
   process.env.CLIENT_URL, // Vercel client URL (from .env)
   "http://localhost:5173", // Local development
 ];
 // console.log(allowedOrigins);
 
-const io = new SocketIOServer(httpServer, {
-  cors: {
-    origin: allowedOrigins,
-    // methods: ["GET", "POST"],
-    credentials: true
-  }
-});
+// const io = new SocketIOServer(httpServer, {
+//   cors: {\n//     origin: allowedOrigins,\n//     methods: ["GET", "POST"],\n//     credentials: true\n//   }\n// });
 
-// Make io accessible in routes
-app.set("io", io);
+// Make io accessible in routes (Commented out)
+// app.set("io", io);
 
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
@@ -90,7 +85,11 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Start server with Socket.IO
-httpServer.listen(PORT, () => {
+// Start server with Socket.IO (Commented out - switch to app.listen)
+// httpServer.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
