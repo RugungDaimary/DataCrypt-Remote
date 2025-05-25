@@ -16,6 +16,7 @@ const SignIn: React.FC = () => {
   const { login, loginWithOTP } = useAuth();
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const handleSendOTP = async () => {
     if (!email.trim()) {
       setError('Email is required');
@@ -26,7 +27,7 @@ const SignIn: React.FC = () => {
     setError(null);
 
     try {
-      await fetch('/api/auth/send-otp', {
+      await fetch(`${BASE_URL}/api/auth/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -39,6 +39,9 @@ interface FileTransfer {
   downloaded: boolean;
   filePath?: string;
 }
+
+const BASE_URL = import.meta.env.VITE_API_URL ;
+
 const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
   withCredentials: true,
 });
@@ -93,7 +96,7 @@ const Home: React.FC = () => {
   // Fetch received files for the logged-in user
   const fetchReceivedFiles = async () => {
     try {
-      const response = await axios.get("/api/transfers/inbox");
+      const response = await axios.get(`${BASE_URL}/api/transfers/inbox`);
       setReceivedFiles(response.data);
     } catch (error) {
       console.error("Failed to fetch received files:", error);
@@ -105,7 +108,7 @@ const Home: React.FC = () => {
   const fetchSentFiles = async () => {
     if (!user?.email) return;
     try {
-      const response = await axios.get("/api/transfers/sent", {
+      const response = await axios.get(`${BASE_URL}/api/transfers/sent`, {
         params: { email: user.email },
       });
       setSentFiles(response.data);
@@ -172,7 +175,7 @@ const Home: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`/api/users/public-key/${email}`);
+      const response = await axios.get(`${BASE_URL}/api/users/public-key/${email}`);
       if (response.data.publicKey) {
         setUserFound(true);
         setRecipientPublicKey(response.data.publicKey);
@@ -237,7 +240,7 @@ const Home: React.FC = () => {
       formData.append("fileName", encryptedFile.name);
       formData.append("recipientEmail", recipientEmail);
 
-      await axios.post("/api/transfers/upload", formData, {
+      await axios.post(`${BASE_URL}/api/transfers/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -281,7 +284,10 @@ const Home: React.FC = () => {
   const handleSendInvitation = async () => {
     try {
       setLoading(true);
-      await axios.post("/api/invite", { email: recipientEmail, senderName: user?.name });
+      await axios.post(`${BASE_URL}/api/invite`, {
+        email: recipientEmail,
+        senderName: user?.name,
+      });
       setSuccess("Invitation sent!");
     } catch (err) {
       setError("Failed to send invitation.");

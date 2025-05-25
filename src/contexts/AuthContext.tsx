@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // Set the base URL for all axios requests
 // This will read from VITE_API_URL environment variable
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+// axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL ;
 
 interface User {
   id: string;
@@ -45,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const token = localStorage.getItem('token');
         if (token) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const response = await axios.get('/api/auth/user');
+          const response = await axios.get(`${BASE_URL}/api/auth/user`);
           setUser(response.data);
         }
       } catch (err) {
@@ -62,7 +63,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       setError(null);
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
+        email,
+        password,
+      });
       localStorage.setItem('token', response.data.token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       setUser(response.data.user);
@@ -75,7 +79,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithOTP = async (email: string, otp: string) => {
     try {
       setError(null);
-      const response = await axios.post('/api/auth/login/otp', { email, otp });
+      const response = await axios.post(`${BASE_URL}/api/auth/login/otp`, {
+        email,
+        otp,
+      });
       localStorage.setItem('token', response.data.token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
       setUser(response.data.user);
@@ -88,7 +95,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (name: string, email: string, password: string, publicKey?: string) => {
     try {
       setError(null);
-      const response = await axios.post('/api/auth/register', { name, email, password, publicKey });
+      const response = await axios.post(`${BASE_URL}/api/auth/register`, {
+        name,
+        email,
+        password,
+        publicKey,
+      });
       return response.data;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -99,7 +111,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const verifyOTP = async (email: string, otp: string) => {
     try {
       setError(null);
-      const response = await axios.post('/api/auth/verify-otp', { email, otp });
+      const response = await axios.post(`${BASE_URL}/api/auth/verify-otp`, {
+        email,
+        otp,
+      });
       return response.data;
     } catch (err: any) {
       setError(err.response?.data?.message || 'OTP verification failed');
@@ -116,7 +131,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updatePublicKey = async (publicKey: string) => {
     try {
       setError(null);
-      const response = await axios.put('/api/users/public-key', { publicKey });
+      const response = await axios.put(`${BASE_URL}/api/users/public-key`, {
+        publicKey,
+      });
       setUser(prev => prev ? { ...prev, publicKey } : null);
       return response.data;
     } catch (err: any) {
