@@ -100,7 +100,7 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
-// Login with email and password
+/// Login with email and password
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -108,42 +108,69 @@ router.post('/login', async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
     }
     
     // Check if user is verified
     if (!user.isVerified) {
-      return res.status(401).json({ message: 'Email not verified' });
+      return res.status(401).json({
+        success: false,
+        message: 'Email not verified'
+      });
     }
     
     // Verify password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({
+        success: false,
+        message: 'Password is incorrect'
+      });
     }
     
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id },
+      { email: user.email, id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: "24h" }
     );
     
-    res.json({
+    // // Save token to user document in database
+    // user.token = token;
+    // await user.save();
+    
+    // Create a user object without password
+    const userToReturn = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      publicKey: user.publicKey
+    };
+    
+    // Set cookie for token and return success response
+    const options = {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
+    
+    return res.cookie("token", token, options).status(200).json({
+      success: true,
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        publicKey: user.publicKey
-      }
+      user: userToReturn,
+      message: 'User Login Success'
     });
+    
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
   }
 });
-
 // Send OTP for login
 router.post('/send-otp', async (req, res) => {
   try {

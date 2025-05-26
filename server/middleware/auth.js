@@ -3,23 +3,43 @@ import User from '../models/User.js';
 
 export const auth = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    
+    // Extract token from different sources
+    const token =
+      req.header("Authorization")?.replace("Bearer ", "") ||
+      req.cookies?.token ||
+      req.body?.token;
+
     if (!token) {
-      return res.status(401).json({ message: 'Authentication required' });
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
     }
-    
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    
-    if (!user) {
-      return res.status(401).json({ message: 'User not found' });
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      req.user = user;
+      req.token = token;
+      next();
+    } catch (err) {
+      return res.status(401).json({
+        success: false,
+        message: "Token is invalid",
+      });
     }
-    
-    req.user = user;
-    req.token = token;
-    next();
   } catch (error) {
-    res.status(401).json({ message: 'Authentication failed' });
+    return res.status(401).json({
+      success: false,
+      message: "Something went wrong while validating the token",
+    });
   }
 };
